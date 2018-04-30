@@ -1,0 +1,223 @@
+<!Doctype HTML>
+<html>
+    
+    <head>
+        <title>CodeBase</title>
+        <link href="https://fonts.googleapis.com/css?family=Great+Vibes|Roboto" rel="stylesheet">
+    </head>
+    
+    <body>
+        <div id="signIn">
+            <h1>Welcome to CodeBase.</h1>
+            <h2 id="signIn">Sign In</h2>
+            <input type="email" id="email" placeholder="Email" align="center"></input>
+            <input type="password" id="password" placeholder="Password" align="center"></input>
+            <p id="message"></p>
+            <div class="buttons"><button onclick="toggleSignIn()">Sign In</button></div>
+            <div class="buttons"><button onclick="document.getElementById('signIn').style.display = 'none'; document.getElementById('forgotPassword').style.display = 'initial'">Forgot Password</button><button onclick="document.getElementById('signIn').style.display = 'none'; document.getElementById('signUp').style.display = 'initial'">Don't have an account?</button></div>
+        </div>
+        
+        <div id="signUp">
+            <h1>Don't have an account?</h1>
+            <h2 id="signIn">Sign Up</h2>
+            <p>Because CodeBase is still in development, you can't sign up for it yet. If you're part of the beta testing team, you'll have had an account set up for you by Roy.</p>
+            <div class="buttons"><button onclick="handleSignUp()">Sign Up</button></div>
+        </div>
+        
+        <div id="forgotPassword">
+            <h1>Forgot your password?</h1>
+            <h2 id="signIn">Reset Password</h2>
+            <input type="email" id="forgotPasswordEmail" placeholder="Email" align="center"></input>
+            <p id="forgotPasswordMessage"></p>
+            <div class="buttons"><button onclick="sendPasswordReset()">Send Reset Email</button></div>
+        </div>
+        
+        <div id="verifyEmail">
+            <h1>Verify your email</h1>
+            <h2 id="signIn">For security,</h2>
+            <p>we need you to verify your email address before you start using CodeBase.<br>We've sent you a verification email. Click the link in the email to verify your address and start exploring the amazing world of CodeBase!</p>
+            <p id="verifyMessage"></p>
+            <div class="buttons"><button onclick="location.reload()">Continue</button></div>
+            <div class="buttons"><button onclick="firebase.auth().currentUser.sendEmailVerification().then(function() {})">Resend Email</button></div>
+        </div>
+    </body>
+    
+    <script src="/__/firebase/4.13.0/firebase-auth.js"></script>
+    
+    <!-- Leave out Storage -->
+    <!-- <script src="/__/firebase/4.13.0/firebase-storage.js"></script> -->
+    
+    <script src="/__/firebase/init.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyBqF3nKITvEKUjvka5PvN83iz1vMnr2wGA",
+            authDomain: "codebase-806bd.firebaseapp.com",
+            databaseURL: "https://codebase-806bd.firebaseio.com",
+            projectId: "codebase-806bd",
+            storageBucket: "codebase-806bd.appspot.com",
+            messagingSenderId: "633801887796"
+        };
+        firebase.initializeApp(config);
+        
+        function toggleSignIn() {
+            if (firebase.auth().currentUser) {
+                // [START signout]
+                firebase.auth().signOut();
+                // [END signout]
+            } else {
+                var email = document.getElementById('email').value;
+                var password = document.getElementById('password').value;
+                if (email.length == 0 || password.length == 0) {
+                    if (email.length == 0) {
+                        document.getElementById("email").style.borderColor = "#FF3B30"
+                        document.getElementById("email").style.borderWidth = "2pt"
+                    } else {
+                        document.getElementById("email").style.borderColor = "#000"
+                        document.getElementById("email").style.borderWidth = "1pt"
+                    }
+                    if (password.length  == 0) {
+                        document.getElementById("password").style.borderColor = "#FF3B30"
+                        document.getElementById("password").style.borderWidth = "2pt"
+                    } else {
+                        document.getElementById("password").style.borderColor = "#000"
+                        document.getElementById("password").style.borderWidth = "1pt"
+                    }
+                    
+                    return;
+                }
+                
+                // Sign in with email and pass.
+                // [START authwithemail]
+                firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+                    // Handle Errors here.
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    // [START_EXCLUDE]
+                    if (errorCode === 'auth/wrong-password') {
+                        document.getElementById("message").innerHTML = "Your password is incorrect."
+                    } else if (errorCode === 'auth/user-not-found') {
+                        document.getElementById("message").innerHTML = "You don't seem to have an account. Click the button below to create one."
+                    } else {
+                        document.getElementById("message").innerHTML = errorMessage
+                    }
+                    console.log(error);
+                    // [END_EXCLUDE]
+                });
+                    // [END authwithemail]
+            }
+        }
+    
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in.
+                var displayName = user.displayName;
+                var email = user.email;
+                var emailVerified = user.emailVerified;
+                var uid = user.uid;
+                
+                if (!emailVerified) {
+                    document.getElementById('signUp').style.display = "none"
+                    document.getElementById('forgotPassword').style.display = "none"
+                    document.getElementById('verifyEmail').style.display = "initial"
+                    document.getElementById('signIn').style.display = "none"
+                                           
+                    firebase.auth().currentUser.sendEmailVerification().then(function() {})
+                } else {
+                    window.location = "Files.html"
+                }
+            } else {
+                document.getElementById('signUp').style.display = "none"
+                document.getElementById('forgotPassword').style.display = "none"
+                document.getElementById('verifyEmail').style.display = "none"
+                document.getElementById('signIn').style.display = "initial"
+            }
+        });
+    
+        function sendPasswordReset() {
+            var email = document.getElementById('email').value;
+            // [START sendpasswordemail]
+            firebase.auth().sendPasswordResetEmail(email).then(function() {
+                // Password Reset Email Sent!
+                // [START_EXCLUDE]
+                document.getElementById("forgotPasswordMessage").innerHTML = "We've sent an email to the address you provided to reset your password. If it's not there, click the Send Reset Email button again or check your spam folder."
+                // [END_EXCLUDE]
+                }).catch(function(error) {
+                    // Handle Errors here.
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    // [START_EXCLUDE]
+                    if (errorCode == 'auth/invalid-email') {
+                         document.getElementById("forgotPasswordMessage").innerHTML = "That doesn't seem to be a valid email address."
+                    } else if (errorCode == 'auth/user-not-found') {
+                         document.getElementById("forgotPasswordMessage").innerHTML = "There isn't an account with that email address."
+                    }
+                    console.log(error);
+                    // [END_EXCLUDE]
+                });
+                // [END sendpasswordemail];
+        }
+    </script>
+    
+    <style>
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 50pt;
+            font-weight: normal;
+            text-align: center;
+            line-height: 30vh;
+        }
+    
+        h2 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 20pt;
+            text-align: center;
+            font-weight: lighter;
+        }
+    
+        p {
+            font-family: 'Roboto', sans-serif;
+            font-size: 12pt;
+            text-align: center;
+        }
+    
+        input {
+            margin: 6pt auto;
+            padding: 6pt;
+            width: 125pt;
+            border-radius: 6pt;
+            border-color: #000;
+            border-width: 1pt;
+            border-style: solid;
+            display: block;
+            font-family: 'Roboto', sans-serif;
+            font-size: 11pt;
+        }
+    
+        button {
+            display: block;
+            padding: 6pt;
+            border-color: #007AFF;
+            border-width: 2pt;
+            border-radius: 6pt;
+            border-style: solid;
+            background-color: white;
+            color: #007AFF;
+            float: left;
+        }
+        .buttons {
+            margin: 6pt auto;
+            padding: 6pt;
+            display: table;
+        }
+    
+        #signUp {
+            display: none;
+        }
+        #forgotPassword {
+            display: none;
+        }
+    </style>
+    
+</html>
