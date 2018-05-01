@@ -8,7 +8,7 @@
     
     <body>
         <div class="topBar">
-            <button class="topBar">Sign Out</button>
+            <button class="topBar" onclick="toggleSignIn()">Sign Out</button>
             <button class="topBar">Settings</button>
         </div>
         <h1>Welcome to CodeBase.</h1>
@@ -37,11 +37,11 @@
             }
         }
     
-    firebase.auth().onAuthStateChanged(function(user) {
-        if (!user) {
-            window.location = "index.html"
-        }
-    });
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (!user) {
+                window.location = "index.html"
+            }
+        });
     </script>
     
     <style>
