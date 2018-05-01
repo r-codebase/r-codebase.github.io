@@ -7,12 +7,41 @@
     </head>
     
     <body>
+        <div class="topBar">
+            <button class="topBar">Sign Out</button>
+            <button class="topBar">Settings</button>
+        </div>
         <h1>Welcome to CodeBase.</h1>
         <h2>Files</h2>
     </body>
     
-    <script id="script">
+    <script src="/__/firebase/init.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyBqF3nKITvEKUjvka5PvN83iz1vMnr2wGA",
+            authDomain: "codebase-806bd.firebaseapp.com",
+            databaseURL: "https://codebase-806bd.firebaseio.com",
+            projectId: "codebase-806bd",
+            storageBucket: "codebase-806bd.appspot.com",
+            messagingSenderId: "633801887796"
+        };
+        firebase.initializeApp(config);
         
+        function toggleSignIn() {
+            if (firebase.auth().currentUser) {
+                firebase.auth().signOut();
+            } else {
+                window.location = "index.html"
+            }
+        }
+    
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (!user) {
+            window.location = "index.html"
+        }
+    });
     </script>
     
     <style>
@@ -55,6 +84,17 @@
             background-color: white;
             color: #007AFF;
             width: 50pt;
+        }
+        div.topBar {
+            position: fixed;
+            top: 6px;
+            right: 6px;
+            margin: 0px;
+        }
+        button.topBar {
+            float: right;
+            margin: 6pt 6pt 6pt 0pt;
+            display: inline;
         }
     </style>
     
