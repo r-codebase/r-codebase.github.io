@@ -1,0 +1,294 @@
+<!Doctype HTML>
+<html>
+    
+    <head>
+        <title>CodeBase</title>
+        <link href="https://fonts.googleapis.com/css?family=Great+Vibes|Roboto" rel="stylesheet">
+    </head>
+    
+    <body>
+        <div class="topBar">
+            <button class="topBar" onclick="toggleSignIn()">Sign Out</button>
+            <button class="topBar">Settings</button>
+        </div>
+        <h2>New File</h2>
+        <div class="toolbar">
+            <img src="Web.svg" width="30pt" height="30pt" />
+            <img src="Code.svg" width="30pt" height="30pt" />
+            <img src="Brush.svg" width="30pt" height="30pt" />
+            <img />
+            <img src="EntireDocument.svg" width="30pt" height="30pt" />
+            <img />
+            <img src="DecreaseIndent.svg" width="30pt" height="30pt" onclick="if (indentLevel > 0) { indentLevel += 1 }" />
+            <img src="IncreaseIndent.svg" width="30pt" height="30pt" onclick="indentLevel += 1" />
+            <img />
+            <img src="Save.svg" width="30pt" height="30pt" />
+            <img />
+            <img src="Download.svg" width="30pt" height="30pt" />
+            <img src="Share.svg" width="30pt" height="30pt" />
+            <img src="Collaborate.svg" width="30pt" height="30pt" />
+        </div>
+        <div class="editor">
+            <textarea class="code" id="code" onkeyup="update(event)"></textarea>
+            <iframe id="preview"></iframe>
+        </div>
+        <div class="extras">
+            <table>
+                <tbody id="documentation">
+                
+                </tbody>
+            </table>
+        </div>
+    </body>
+    
+    <script src="/__/firebase/init.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyBqF3nKITvEKUjvka5PvN83iz1vMnr2wGA",
+            authDomain: "codebase-806bd.firebaseapp.com",
+            databaseURL: "https://codebase-806bd.firebaseio.com",
+            projectId: "codebase-806bd",
+            storageBucket: "codebase-806bd.appspot.com",
+            messagingSenderId: "633801887796"
+        };
+        firebase.initializeApp(config);
+        
+        function toggleSignIn() {
+            if (firebase.auth().currentUser) {
+                firebase.auth().signOut();
+            } else {
+                window.location = "index.html"
+            }
+        }
+    
+        firebase.auth().onAuthStateChanged(function(user) {
+            var emailVerified = user.emailVerified;
+            
+            if (!user) {
+                window.location = "index.html"
+            }
+            if (!emailVerified) {
+                window.location = "index.html"
+            }
+        });
+        
+        
+        var functions = ["&lt;a>&lt;/a>", "&lt;audio>&lt;/audio>", "&lt;b>&lt;/b>", "&lt;body>&lt;/body>", "&lt;br>", "&lt;button>&lt;/button>", "&lt;div>&lt;/div>", "&lt;h1>&lt;/h1>", "&lt;h2>&lt;/h2>", "&lt;h3>&lt;/h3>", "&lt;head>&lt;/head>", "&lt;html>&lt;/html>", "&lt;i>&lt;/i>", "&lt;img>&lt;/img>", "&lt;input>&lt;/input>", "&lt;p>&lt;/p>", "&lt;script>&lt;/script>", "&lt;style>&lt;/style>", "&lt;u>&lt;/u>", "&lt;video>&lt;/video>", "document.getElementById()", "if", "for-in", "function", "switch", "var", "while", "background-color", "border-color", "border-radius", "border-style", "border-width", "display", "flex [webkit]", "font-family", "font-size", "font-weight", "height", "width", "top", "bottom", "left", "right", "margin", "padding", "text-align"]
+        var descriptions = ["Link to another website", "Embedded audio", "Bold text", "Content of website", "Line break", "Clickable button", "Section of webpage", "Primary heading", "Secondary heading", "Tertiary heading", "Information about website", "Entire content of website, including &lt;body> tags and &lt;head> tags", "Italic text", "Image", "Text box, file upload, etc.", "Paragraph", "JavaScript or other language", "CSS styling", "Underlined text", "Embedded video", "Get HTML object", "Execute if statement is true", "Execute for each element of an object", "Declare a function", "Execute code corresponding to a case", "Declare a variable", "Execute while statement is true", "Background color", "Border color", "Rounded corners", "Border style", "Border width", "Controls how an HTML element is displayed", "Stretches elements to fit container (add &quot;display: flex;&quot; to container)", "Font", "Text size", "Font weight: lighter, bold, etc.", "Height of HTML element", "Width of HTML element", "Top position of HTML element", "Bottom position of HTML element", "Left position of HTML element", "Right position of HTML element", "Blank space around an HTML element", "Blank space inside an HTML element", "Text alignment: left, right, center, etc."]
+        var textToAdd = ["", "&lt;audio source=&quot;&quot; type=&quot;&quot;>&lt;/audio>", "", "", "", "&lt;button onclick=&quot;&quot;>&lt;/button>", ]
+        var htmlForDocumentation = "<tr>\n<th>Function</th>\n<th>Language</th>\n<th>Description</th>\n<th></th>\n</tr>"
+        
+        for (index in functions) {
+            if (index <= 20) {
+                htmlForDocumentation += "<tr><td>" + functions[index] + "</td><td>" + "HTML" + "</td><td>" + descriptions[index] + "</td><td class='insert' onclick=''>Insert</td></tr>"
+            } else if (index <= 27) {
+                htmlForDocumentation += "<tr><td>" + functions[index] + "</td><td>" + "JavaScript" + "</td><td>" + descriptions[index] + "</td><td class='insert' onclick=''>Insert</td></tr>"
+            } else {
+                htmlForDocumentation += "<tr><td>" + functions[index] + "</td><td>" + "CSS" + "</td><td>" + descriptions[index] + "</td><td class='insert' onclick=''>Insert</td></tr>"
+            }
+        }
+        document.getElementById("documentation").innerHTML = htmlForDocumentation
+        document.getElementById("code").innerHTML = "&lt;!Doctype HTML>\n&lt;html>\n    &lt;head>\n        &lt;title>&lt;/title>\n    &lt;/head>\n    &lt;body>\n        \n        \n        \n    &lt;/body>\n&lt;/html>"
+        
+        var code = document.getElementById("code")
+        var preview = document.getElementById("preview")
+        function update(keyboardEvent) {
+            preview.srcdoc = code.value
+            console.log(keyboardEvent)
+        }
+    
+        var indentLevel = 0
+        code.onkeydown = function(keyboardEvent){
+            if (keyboardEvent.key == 9 || keyboardEvent.which == 9) {
+                keyboardEvent.preventDefault();
+                var s = this.selectionStart;
+                this.value = this.value.substring(0, this.selectionStart) + "    " + this.value.substring(this.selectionEnd);
+                this.selectionEnd = s + 4;
+                indentLevel += 1
+            }
+            if (keyboardEvent.key == 13 || keyboardEvent.which == 13) {
+                keyboardEvent.preventDefault();
+                var s = this.selectionStart;
+                var spaces = ""
+                for (_ in Array.from(Array(indentLevel).keys())) {
+                    spaces += "    "
+                }
+                this.value = this.value.substring(0, this.selectionStart) + "\n" + spaces + this.value.substring(this.selectionEnd);
+                this.selectionEnd = s + (indentLevel * 4) + 1
+            }
+        }
+    </script>
+    
+    <style>
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 50pt;
+            font-weight: normal;
+            text-align: center;
+            line-height: 30vh;
+        }
+    
+        h2 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 20pt;
+            text-align: center;
+            font-weight: lighter;
+        }
+    
+        input {
+            margin: auto;
+            padding: 6pt;
+            width: 125pt;
+            border-radius: 6pt;
+            border-color: #000;
+            border-width: 1pt;
+            border-style: solid;
+            display: block;
+            font-family: 'Roboto', sans-serif;
+            font-size: 11pt;
+        }
+    
+        button {
+            margin: 6pt auto;
+            display: block;
+            padding: 6pt;
+            border-color: #007AFF;
+            border-width: 2pt;
+            border-radius: 6pt;
+            border-style: solid;
+            background-color: white;
+            color: #007AFF;
+            width: 50pt;
+        }
+        div.topBar {
+            position: fixed;
+            top: 6px;
+            right: 6px;
+            margin: 0px;
+        }
+        button.topBar {
+            float: right;
+            margin: 6pt 6pt 6pt 0pt;
+            display: inline;
+        }
+    
+        .editor {
+            position: fixed;
+            display: flex;
+            left: 6pt;
+            right: 6pt;
+            top: 104pt;
+            bottom: 212pt;
+        }
+        .extras {
+            position: fixed;
+            display: flex;
+            left: 6pt;
+            right: 6pt;
+            bottom: 6pt;
+            height: 200pt;
+        }
+        .toolbar {
+            position: fixed;
+            display: flex;
+            left: 12pt;
+            right: 12pt;
+            top: 60pt;
+            height: 36pt;
+            border-width: 1pt;
+            border-style: solid;
+            border-color: #000;
+        }
+    
+        textarea {
+            margin: 6pt;
+            border-style: solid;
+            border-color: #000;
+            border-width: 1pt;
+            resize: none;
+            -webkit-flex: 300pt;
+            flex: 300pt;
+        }
+    
+        iframe {
+            border-style: solid;
+            border-width: 1pt;
+            margin: 6pt;
+            float: right;
+            top: 0px;
+            right: 0px;
+            bottom: 0px;
+            -webkit-flex: 0pt;
+            flex: 0pt;
+        }
+    
+        .code {
+            font-size: 11pt;
+            font-family: 'Menlo', monospace;
+        }
+    
+        pre {
+            margin: 6pt;
+            -webkit-flex: 0pt;
+            flex: 0pt;
+        }
+    
+        table {
+            display: flex;
+            font-family: 'Roboto', sans-serif;
+            font-size: 12pt;
+            border-style: solid;
+            border-color: #000;
+            border-width: 1pt;
+            margin: 6pt;
+            overflow: scroll;
+            -webkit-flex: 300pt;
+            flex: 300pt;
+        }
+        tbody {
+            width: 100%;
+            font-weight: normal;
+        }
+        tr {
+            display: flex;
+            width: 100%;
+            border-style: solid;
+            border-width: 0pt 0pt 1pt 0pt;
+            border-color: #DDD;
+        }
+        th {
+            margin: 6pt;
+            -webkit-flex: 0pt;
+            flex: 0pt;
+            padding: 6pt;
+        }
+        td {
+            margin: 6pt;
+            -webkit-flex: 0pt;
+            flex: 0pt;
+            padding: 6pt;
+            border-style: solid;
+            border-width: 0pt 0pt 0pt 1pt;
+            border-color: #EEE;
+            line-height: 100%;
+        }
+    
+        .insert {
+            color: #007AFF;
+            text-align: center;
+        }
+    
+        .body {
+            overflow: hidden;
+        }
+    
+        img {
+            margin: 6pt;
+            vertical-align: middle;
+        }
+    
+    </style>
+    
+</html>
