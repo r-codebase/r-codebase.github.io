@@ -1,0 +1,23 @@
+<svg width="40" height="25" viewBox="0 0 40 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="Canvas" fill="none">
+<g id="Everything" clip-path="url(#clip0)">
+<g id="&#60;">
+<path d="M 5.16113 0.888672L 1.01074 2.45117L 5.16113 3.99902L 5.16113 4.89258L 0 2.85156L 0 2.04102L 5.16113 0L 5.16113 0.888672Z" transform="translate(0 10.0537)" fill="black"/>
+</g>
+<g id="&#62;">
+<path d="M 0 0.888672L 0 0L 5.16113 2.04102L 5.16113 2.85156L 0 4.89258L 0 3.99902L 4.15039 2.45117L 0 0.888672Z" transform="translate(34.8389 10.0537)" fill="black"/>
+</g>
+<g id="/">
+<path d="M 3.84277 0L 4.77051 0L 0.932617 8.21777L 0 8.21777L 3.84277 0Z" transform="translate(17.6147 8.39111)" fill="black"/>
+</g>
+</g>
+</g>
+<defs>
+
+<clipPath id="clip0">
+<rect width="40" height="25" fill="white"/>
+</clipPath>
+
+</defs>
+</svg>
+
