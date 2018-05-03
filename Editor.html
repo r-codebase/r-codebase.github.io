@@ -64,12 +64,19 @@
         }
     
         firebase.auth().onAuthStateChanged(function(user) {
-            var emailVerified = user.emailVerified;
-            
-            if (!user) {
-                window.location = "index.html"
-            }
-            if (!emailVerified) {
+            if (user) {
+                // User is signed in.
+                var displayName = user.displayName;
+                var email = user.email;
+                var emailVerified = user.emailVerified;
+                var uid = user.uid;
+
+                if (!emailVerified) {
+                    window.location = "index.html"
+                } else {
+                    console.log("User is verified.")
+                }
+            } else {
                 window.location = "index.html"
             }
         });
