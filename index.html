@@ -6,24 +6,23 @@
         <link href="https://fonts.googleapis.com/css?family=Great+Vibes|Roboto" rel="stylesheet">
     </head>
     
-    <body>
-        <div id="signIn">
+    <body><div class="centeredContent">
+        <div id="signIn" class="view">
             <h1>Welcome to CodeBase.</h1>
             <h2 id="signIn">Sign In</h2>
             <input type="email" id="email" placeholder="Email" align="center"></input>
             <input type="password" id="password" placeholder="Password" align="center"></input>
             <p id="message"></p>
             <div class="buttons"><button onclick="toggleSignIn()">Sign In</button></div>
-            <div class="buttons"><button class="no-border" onclick="document.getElementById('signIn').style.display = 'none'; document.getElementById('forgotPassword').style.display = 'initial'">Forgot Password</button><button class="no-border" onclick="document.getElementById('signIn').style.display = 'none'; document.getElementById('signUp').style.display = 'initial'">Don't have an account?</button></div>
         </div>
         
-        <div id="signUp">
+        <div id="signUp" class="view">
             <h1>Don't have an account?</h1>
             <h2 id="signIn">Sign Up</h2>
             <p>Because CodeBase is still in development, you can't sign up for it yet. If you're part of the beta testing team, you'll have had an account set up for you by Roy.</p>
         </div>
         
-        <div id="forgotPassword">
+        <div id="forgotPassword" class="view">
             <h1>Forgot your password?</h1>
             <h2 id="signIn">Reset Password</h2>
             <input type="email" id="forgotPasswordEmail" placeholder="Email" align="center"></input>
@@ -32,7 +31,7 @@
             <div class="buttons"><button onclick="location.reload()">Sign In</button></div>
         </div>
         
-        <div id="verifyEmail">
+        <div id="verifyEmail" class="view">
             <h1>Verify your email</h1>
             <h2 id="signIn">For security,</h2>
             <p>we need you to verify your email address before you start using CodeBase.<br>We've sent you a verification email. Click the link in the email to verify your address and start exploring the amazing world of CodeBase!</p>
@@ -40,6 +39,10 @@
             <div class="buttons"><button onclick="location.reload()">Continue</button></div>
             <div class="buttons"><button onclick="firebase.auth().currentUser.sendEmailVerification().then(function() {})">Resend Email</button></div>
         </div>
+        </div>
+    
+        <img src="bg/Purple Flowers.jpg" />
+        <div class="whiteBackground"></div>
     </body>
     
     <script src="/__/firebase/4.13.0/firebase-auth.js"></script>
@@ -62,20 +65,7 @@
         firebase.initializeApp(config);
         
         // Sign user out on window close
-        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
-        .then(function() {
-            // Existing and future Auth states are now persisted in the current
-            // session only. Closing the window would clear any existing state even
-            // if a user forgets to sign out.
-            // ...
-            // New sign-in will be persisted with session persistence.
-            return firebase.auth().signInWithEmailAndPassword(email, password);
-        })
-        .catch(function(error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-        });
+        
         
         function toggleSignIn() {
             if (firebase.auth().currentUser) {
@@ -188,7 +178,7 @@
             font-size: 50pt;
             font-weight: normal;
             text-align: center;
-            line-height: 30vh;
+            margin: 0pt 0pt 50pt 0pt;
         }
     
         h2 {
@@ -255,7 +245,30 @@
             -webkit-flex-direction: column;
         }
         .no-border {
-            border-width: 0pt;
+            border-style: none;
+            background-color: initial;
+        }
+    
+        img {
+            position: fixed;
+            top: 0pt;
+            left: 0pt;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+        .view {
+            border-radius: 6pt;
+            border-style: none;
+            background-color: #FFF;
+            box-shadow: 0px 0px 6px 0px #000;
+            padding: 50pt;
+        }
+        .bottomView {
+            position: fixed;
+            bottom: 6pt;
+            margin: auto;
         }
     </style>
     
