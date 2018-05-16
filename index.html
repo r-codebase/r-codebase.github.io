@@ -31,7 +31,7 @@
             <div class="buttons"><button onclick="location.reload()">Sign In</button></div>
         </div>
         
-        <div id="verifyEmail" class="view">
+        <div id="verifyEmail" class="view" style="display: none;">
             <h1>Verify your email</h1>
             <h2 id="signIn">For security,</h2>
             <p>we need you to verify your email address before you start using CodeBase.<br>We've sent you a verification email. Click the link in the email to verify your address and start exploring the amazing world of CodeBase!</p>
@@ -41,8 +41,8 @@
         </div>
         </div>
     
-        <img src="bg/Purple Flowers.jpg" />
-        <div class="whiteBackground"></div>
+        <img src="https://r-codebase.github.io/bg/Purple Flowers.jpg" />
+        <div class="view bottomView"><div class="buttons"><button class="link" onclick="document.getElementById('signIn').style.display = 'none'; document.getElementById('forgotPassword').style.display = 'initial'">Forgot Password</button><button class="link" onclick="document.getElementById('signIn').style.display = 'none'; document.getElementById('signUp').style.display = 'initial'">Don't have an account?</button></div></div>
     </body>
     
     <script src="/__/firebase/4.13.0/firebase-auth.js"></script>
@@ -78,17 +78,17 @@
                 if (email.length == 0 || password.length == 0) {
                     if (email.length == 0) {
                         document.getElementById("email").style.borderColor = "#FF3B30"
-                        document.getElementById("email").style.borderWidth = "2pt"
+                        document.getElementById("email").style.borderWidth = "0pt 0pt 2pt 0pt"
                     } else {
                         document.getElementById("email").style.borderColor = "#000"
-                        document.getElementById("email").style.borderWidth = "1pt"
+                        document.getElementById("email").style.borderWidth = "0pt 0pt 1pt 0pt"
                     }
                     if (password.length  == 0) {
                         document.getElementById("password").style.borderColor = "#FF3B30"
-                        document.getElementById("password").style.borderWidth = "2pt"
+                        document.getElementById("password").style.borderWidth = "0pt 0pt 2pt 0pt"
                     } else {
                         document.getElementById("password").style.borderColor = "#000"
-                        document.getElementById("password").style.borderWidth = "1pt"
+                        document.getElementById("password").style.borderWidth = "0pt 0pt 1pt 0pt"
                     }
                     
                     return;
@@ -200,13 +200,17 @@
             margin: 6pt auto;
             padding: 6pt;
             width: 125pt;
-            border-radius: 6pt;
             border-color: #000;
-            border-width: 1pt;
+            border-width: 0pt 0pt 1pt 0pt;
             border-style: solid;
             display: block;
             font-family: 'Roboto', sans-serif;
             font-size: 11pt;
+            outline: none;
+        }
+        input:focus {
+            border-color: #007AFF;
+            border-width: 0pt 0pt 2pt 0pt;
         }
     
         button {
@@ -244,10 +248,6 @@
             flex-direction: column;
             -webkit-flex-direction: column;
         }
-        .no-border {
-            border-style: none;
-            background-color: initial;
-        }
     
         img {
             position: fixed;
@@ -264,11 +264,29 @@
             background-color: #FFF;
             box-shadow: 0px 0px 6px 0px #000;
             padding: 50pt;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow: scroll;
         }
         .bottomView {
             position: fixed;
             bottom: 6pt;
-            margin: auto;
+            left: 6pt;
+            right: 6pt;
+            padding: 0pt;
+            max-width: 100%;
+        }
+    
+        .link {
+            border-style: solid;
+            border-width: 0pt 0pt 1pt 0pt;
+            border-radius: 0pt;
+            border-color: #FFF;
+            padding: 1pt;
+            margin: 0pt 6pt;
+        }
+        .link:hover {
+            border-color: #007AFF;
         }
     </style>
     
