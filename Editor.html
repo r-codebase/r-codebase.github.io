@@ -6,27 +6,30 @@
         <link href="https://fonts.googleapis.com/css?family=Great+Vibes|Roboto" rel="stylesheet">
     </head>
     
-    <body>
+    <body><div class="view">
         <div class="topBar">
             <button class="topBar" onclick="toggleSignIn()">Sign Out</button>
             <button class="topBar">Settings</button>
         </div>
         <h2>New File</h2>
         <div class="toolbar">
-            <img src="Web.svg" width="30pt" height="30pt" />
-            <img src="Code.svg" width="30pt" height="30pt" />
-            <img src="Brush.svg" width="30pt" height="30pt" />
-            <img />
-            <img src="EntireDocument.svg" width="30pt" height="30pt" />
-            <img />
-            <img src="DecreaseIndent.svg" width="30pt" height="30pt" onclick="if (indentLevel > 0) { indentLevel -= 1 }" />
-            <img src="IncreaseIndent.svg" width="30pt" height="30pt" onclick="indentLevel += 1" />
-            <img />
-            <img src="Save.svg" width="30pt" height="30pt" />
-            <img />
-            <img src="Download.svg" width="30pt" height="30pt" />
-            <img src="Share.svg" width="30pt" height="30pt" />
-            <img src="Collaborate.svg" width="30pt" height="30pt" />
+            <img src="Web.svg" />
+            <img src="Code.svg" />
+            <img src="Brush.svg" />
+            <img class="filler" />
+            <img src="EntireDocument.svg" />
+            <img class="filler" />
+            <img src="DecreaseIndent.svg" onclick="if (indentLevel > 0) { indentLevel -= 1; updateIndentation(); }" />
+            <img src="IncreaseIndent.svg" onclick="indentLevel += 1; updateIndentation();" />
+            <img class="filler" />
+            <img src="Save.svg" />
+            <img class="filler" />
+            <img src="Download.svg" />
+            <img src="Share.svg" />
+            <img src="Collaborate.svg" />
+            </div><div class="rightToolbar">
+            <img src="ExitFullscreen.svg" style="float: right;" />
+            <img src="Fullscreen.svg" style="float: right;" />
         </div>
         <div class="editor">
             <textarea class="code" id="code" onkeyup="update(event)"></textarea>
@@ -38,95 +41,10 @@
                 
                 </tbody>
             </table>
-        </div>
+        </div></div>
+    
+        <img class="background" src="https://r-codebase.github.io/bg/Purple Flowers.jpg" />
     </body>
-    
-    <script src="/__/firebase/init.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
-    <script>
-        // Initialize Firebase
-        var config = {
-            apiKey: "AIzaSyBqF3nKITvEKUjvka5PvN83iz1vMnr2wGA",
-            authDomain: "codebase-806bd.firebaseapp.com",
-            databaseURL: "https://codebase-806bd.firebaseio.com",
-            projectId: "codebase-806bd",
-            storageBucket: "codebase-806bd.appspot.com",
-            messagingSenderId: "633801887796"
-        };
-        firebase.initializeApp(config);
-        
-        function toggleSignIn() {
-            if (firebase.auth().currentUser) {
-                firebase.auth().signOut();
-            } else {
-                window.location = "index.html"
-            }
-        }
-    
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (user) {
-                // User is signed in.
-                var displayName = user.displayName;
-                var email = user.email;
-                var emailVerified = user.emailVerified;
-                var uid = user.uid;
-
-                if (!emailVerified) {
-                    window.location = "index.html"
-                } else {
-                    console.log("User is verified.")
-                }
-            } else {
-                window.location = "index.html"
-            }
-        });
-        
-        
-        var functions = ["&lt;a>&lt;/a>", "&lt;audio>&lt;/audio>", "&lt;b>&lt;/b>", "&lt;body>&lt;/body>", "&lt;br>", "&lt;button>&lt;/button>", "&lt;div>&lt;/div>", "&lt;h1>&lt;/h1>", "&lt;h2>&lt;/h2>", "&lt;h3>&lt;/h3>", "&lt;head>&lt;/head>", "&lt;html>&lt;/html>", "&lt;i>&lt;/i>", "&lt;img>&lt;/img>", "&lt;input>&lt;/input>", "&lt;p>&lt;/p>", "&lt;script>&lt;/script>", "&lt;style>&lt;/style>", "&lt;u>&lt;/u>", "&lt;video>&lt;/video>", "document.getElementById()", "if", "for-in", "function", "switch", "var", "while", "background-color", "border-color", "border-radius", "border-style", "border-width", "display", "flex [webkit]", "font-family", "font-size", "font-weight", "height", "width", "top", "bottom", "left", "right", "margin", "padding", "text-align"]
-        var descriptions = ["Link to another website", "Embedded audio", "Bold text", "Content of website", "Line break", "Clickable button", "Section of webpage", "Primary heading", "Secondary heading", "Tertiary heading", "Information about website", "Entire content of website, including &lt;body> tags and &lt;head> tags", "Italic text", "Image", "Text box, file upload, etc.", "Paragraph", "JavaScript or other language", "CSS styling", "Underlined text", "Embedded video", "Get HTML object", "Execute if statement is true", "Execute for each element of an object", "Declare a function", "Execute code corresponding to a case", "Declare a variable", "Execute while statement is true", "Background color", "Border color", "Rounded corners", "Border style", "Border width", "Controls how an HTML element is displayed", "Stretches elements to fit container (add &quot;display: flex;&quot; to container)", "Font", "Text size", "Font weight: lighter, bold, etc.", "Height of HTML element", "Width of HTML element", "Top position of HTML element", "Bottom position of HTML element", "Left position of HTML element", "Right position of HTML element", "Blank space around an HTML element", "Blank space inside an HTML element", "Text alignment: left, right, center, etc."]
-        var textToAdd = ["", "&lt;audio source=&quot;&quot; type=&quot;&quot;>&lt;/audio>", "", "", "", "&lt;button onclick=&quot;&quot;>&lt;/button>", ]
-        var htmlForDocumentation = "<tr>\n<th>Function</th>\n<th>Language</th>\n<th>Description</th>\n<th></th>\n</tr>"
-        
-        for (index in functions) {
-            if (index <= 20) {
-                htmlForDocumentation += "<tr><td>" + functions[index] + "</td><td>" + "HTML" + "</td><td>" + descriptions[index] + "</td><td class='insert' onclick=''>Insert</td></tr>"
-            } else if (index <= 27) {
-                htmlForDocumentation += "<tr><td>" + functions[index] + "</td><td>" + "JavaScript" + "</td><td>" + descriptions[index] + "</td><td class='insert' onclick=''>Insert</td></tr>"
-            } else {
-                htmlForDocumentation += "<tr><td>" + functions[index] + "</td><td>" + "CSS" + "</td><td>" + descriptions[index] + "</td><td class='insert' onclick=''>Insert</td></tr>"
-            }
-        }
-        document.getElementById("documentation").innerHTML = htmlForDocumentation
-        document.getElementById("code").innerHTML = "&lt;!Doctype HTML>\n&lt;html>\n    &lt;head>\n        &lt;title>&lt;/title>\n    &lt;/head>\n    &lt;body>\n        \n        \n        \n    &lt;/body>\n&lt;/html>"
-        
-        var code = document.getElementById("code")
-        var preview = document.getElementById("preview")
-        function update(keyboardEvent) {
-            preview.srcdoc = code.value
-            console.log(keyboardEvent)
-        }
-    
-        var indentLevel = 0
-        code.onkeydown = function(keyboardEvent){
-            if (keyboardEvent.key == 9 || keyboardEvent.which == 9) {
-                keyboardEvent.preventDefault();
-                var s = this.selectionStart;
-                this.value = this.value.substring(0, this.selectionStart) + "    " + this.value.substring(this.selectionEnd);
-                this.selectionEnd = s + 4;
-                indentLevel += 1
-            }
-            if (keyboardEvent.key == 13 || keyboardEvent.which == 13) {
-                keyboardEvent.preventDefault();
-                var s = this.selectionStart;
-                var spaces = ""
-                for (_ in Array.from(Array(indentLevel).keys())) {
-                    spaces += "    "
-                }
-                this.value = this.value.substring(0, this.selectionStart) + "\n" + spaces + this.value.substring(this.selectionEnd);
-                this.selectionEnd = s + (indentLevel * 4) + 1
-            }
-        }
-    </script>
     
     <style>
         h1 {
@@ -167,12 +85,11 @@
             border-style: solid;
             background-color: white;
             color: #007AFF;
-            width: 50pt;
         }
         div.topBar {
             position: fixed;
-            top: 6px;
-            right: 6px;
+            top: 26px;
+            right: 26px;
             margin: 0px;
         }
         button.topBar {
@@ -184,29 +101,35 @@
         .editor {
             position: fixed;
             display: flex;
-            left: 6pt;
-            right: 6pt;
-            top: 104pt;
+            left: 26pt;
+            right: 26pt;
+            top: 124pt;
             bottom: 212pt;
         }
         .extras {
             position: fixed;
             display: flex;
-            left: 6pt;
-            right: 6pt;
-            bottom: 6pt;
-            height: 200pt;
+            left: 26pt;
+            right: 26pt;
+            bottom: 26pt;
+            height: 180pt;
         }
         .toolbar {
             position: fixed;
             display: flex;
-            left: 12pt;
-            right: 12pt;
-            top: 60pt;
+            left: 32pt;
+            right: 32pt;
+            top: 80pt;
             height: 36pt;
-            border-width: 1pt;
-            border-style: solid;
-            border-color: #000;
+            border-style: none;
+        }
+        .rightToolbar {
+            position: fixed;
+            display: flex;
+            right: 32pt;
+            top: 80pt;
+            height: 36pt;
+            border-style: none;
         }
     
         textarea {
@@ -292,10 +215,199 @@
         }
     
         img {
-            margin: 6pt;
+            margin: 3px 6px;
             vertical-align: middle;
+            padding: 6px;
+            height: 30px;
+            border-style: none;
+            border-radius: 100%;
+            box-shadow: 0px 0px 6px 0px #CCC;
+            background-color: #FFF;
+            transition: 0.5s;
+            overflow: visible;
+        }
+        img:hover {
+            box-shadow: 0px 0px 8px 0px #AAA;
+        }
+        img:active {
+            background-color: #EEE;
+            transition: 0s;
+        }
+        .filler {
+            opacity: 0;
         }
     
+        .view {
+            border-radius: 6pt;
+            border-style: none;
+            background-color: #FFF;
+            box-shadow: 0px 0px 6px 0px #000;
+            padding: 50pt;
+            position: fixed;
+            top: 20pt;
+            right: 20pt;
+            bottom: 20pt;
+            left: 20pt;
+        }
+        .bottomView {
+            position: fixed;
+            bottom: 6pt;
+            left: 6pt;
+            right: 6pt;
+            padding: 0pt;
+            border-radius: 6pt;
+            border-style: none;
+            background-color: #FFF;
+            box-shadow: 0px 0px 6px 0px #000;
+        }
+        .link {
+            border-style: solid;
+            border-width: 0pt 0pt 1pt 0pt;
+            border-radius: 0pt;
+            border-color: #FFF;
+            padding: 1pt;
+            margin: 0pt 6pt;
+            float: left;
+        }
+        .link:hover {
+            border-color: #007AFF;
+        }
+        .buttons {
+            margin: 6pt auto;
+            padding: 6pt;
+            display: table;
+        }
+        img.background {
+            position: fixed;
+            top: 0pt;
+            left: 0pt;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+            margin: 0pt;
+            padding: 0pt;
+            border-style: none;
+            border-radius: 0pt;
+        }
     </style>
+    
+    
+    <script src="/__/firebase/init.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyBqF3nKITvEKUjvka5PvN83iz1vMnr2wGA",
+            authDomain: "codebase-806bd.firebaseapp.com",
+            databaseURL: "https://codebase-806bd.firebaseio.com",
+            projectId: "codebase-806bd",
+            storageBucket: "codebase-806bd.appspot.com",
+            messagingSenderId: "633801887796"
+        };
+        firebase.initializeApp(config);
+        
+        function toggleSignIn() {
+            if (firebase.auth().currentUser) {
+                firebase.auth().signOut();
+            } else {
+                window.location = "index.html"
+            }
+        }
+    
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in.
+                var displayName = user.displayName;
+                var email = user.email;
+                var emailVerified = user.emailVerified;
+                var uid = user.uid;
+
+                if (!emailVerified) {
+                    window.location = "index.html"
+                } else {
+                    console.log("User is verified.")
+                }
+            } else {
+                window.location = "index.html"
+            }
+        });
+        
+        var indentation = ""
+        for (_ in Array.from(Array(indentLevel).keys())) {
+            indentation += "    "
+        }
+        var functions = ["&lt;a>&lt;/a>", "&lt;audio>&lt;/audio>", "&lt;b>&lt;/b>", "&lt;body>&lt;/body>", "&lt;br>", "&lt;button>&lt;/button>", "&lt;div>&lt;/div>", "&lt;h1>&lt;/h1>", "&lt;h2>&lt;/h2>", "&lt;h3>&lt;/h3>", "&lt;head>&lt;/head>", "&lt;html>&lt;/html>", "&lt;i>&lt;/i>", "&lt;img>&lt;/img>", "&lt;input>&lt;/input>", "&lt;p>&lt;/p>", "&lt;style>&lt;/style>", "&lt;u>&lt;/u>", "&lt;video>&lt;/video>", "document.getElementById(&quot;&quot;)", "if", "for", "function", "switch", "var", "while", "background-color", "border-color", "border-radius", "border-style", "border-width", "display", "flex [webkit]", "font-family", "font-size", "font-weight", "height", "width", "top", "bottom", "left", "right", "margin", "padding", "text-align"]
+        var descriptions = ["Link to another website", "Embedded audio", "Bold text", "Content of website", "Line break", "Clickable button", "Section of webpage", "Primary heading", "Secondary heading", "Tertiary heading", "Information about website", "Entire content of website, including &lt;body> tags and &lt;head> tags", "Italic text", "Image", "Text box, file upload, etc.", "Paragraph", "JavaScript or other language", "CSS styling", "Underlined text", "Embedded video", "Get HTML object", "Execute if statement is true", "Execute for each element of an object", "Declare a function", "Execute code corresponding to a case", "Declare a variable", "Execute while statement is true", "Background color", "Border color", "Rounded corners", "Border style", "Border width", "Controls how an HTML element is displayed", "Stretches elements to fit container (add &quot;display: flex;&quot; to container)", "Font", "Text size", "Font weight: lighter, bold, etc.", "Height of HTML element", "Width of HTML element", "Top position of HTML element", "Bottom position of HTML element", "Left position of HTML element", "Right position of HTML element", "Blank space around an HTML element", "Blank space inside an HTML element", "Text alignment: left, right, center, etc."]
+        var textToAdd = ["<a></a>", "<audio source=&quot;&quot; type=&quot;&quot;></audio>", "<b></b>", "<body></body>", "<br>", "<button onclick=&quot;&quot;></button>", "<div id=&quot;&quot;></div>", "<h1></h1>", "<h2></h2>", "<h3></h3>", "<head></head>", "<html></html>", "<i></i>", "<img src=&quot;&quot;></img>", "<input id=&quot;&quot; type=&quot;&quot;></input>", "<p></p>", "<style></style>", "<u></u>", "<video><scource src=&quot;&quot; type=&quot;&quot;></video>", "document.getElementById('')", "if () {\n" + indentation + "    " + "\n" + indentation + "}", "for (_ in []) {\n" + indentation + "    " + "\n" + indentation + "}", "function func() {\n" + indentation + "    " + "\n" + indentation + "}", "switch () {\n" + indentation + "    " + "\n" + indentation + "}", "", "", ]
+        
+        var htmlForDocumentation = "<tr>\n<th>Function</th>\n<th>Language</th>\n<th>Description</th>\n<th></th>\n</tr>"
+        
+        for (index in functions) {
+            if (index <= 20) {
+                htmlForDocumentation += "<tr><td>" + functions[index] + "</td><td>" + "HTML" + "</td><td>" + descriptions[index] + "</td><td class='insert' onclick='insert(" + index + ")'>Insert</td></tr>"
+            } else if (index <= 27) {
+                htmlForDocumentation += "<tr><td>" + functions[index] + "</td><td>" + "JavaScript" + "</td><td>" + descriptions[index] + "</td><td class='insert' onclick='insert(" + index + ")'>Insert</td></tr>"
+            } else {
+                htmlForDocumentation += "<tr><td>" + functions[index] + "</td><td>" + "CSS" + "</td><td>" + descriptions[index] + "</td><td class='insert' onclick='insert(" + index + ")'>Insert</td></tr>"
+            }
+        }
+    
+        function insert(index) {
+            if (textToAdd[index] !== "") {
+                insertText(textToAdd[index])
+            } else {
+                insertText(functions[index])
+            }
+        }
+        function insertText(text) {
+            code = document.getElementById("code")
+            var s = code.selectionStart;
+            code.value = code.value.substring(0, code.selectionStart) + text + code.value.substring(code.selectionEnd);
+            code.selectionEnd = s + text.length;
+        }
+    
+        document.getElementById("documentation").innerHTML = htmlForDocumentation
+        document.getElementById("code").innerHTML = "&lt;!Doctype HTML>\n&lt;html>\n    &lt;head>\n        &lt;title>&lt;/title>\n    &lt;/head>\n    &lt;body>\n        \n        \n        \n    &lt;/body>\n&lt;/html>"
+        
+        var code = document.getElementById("code")
+        var preview = document.getElementById("preview")
+        function update(keyboardEvent) {
+            preview.srcdoc = code.value
+            console.log(keyboardEvent)
+        }
+    
+        var indentLevel = 0
+        code.onkeydown = function(keyboardEvent){
+            if (keyboardEvent.which == 9) {
+                keyboardEvent.preventDefault();
+                var s = this.selectionStart;
+                this.value = this.value.substring(0, this.selectionStart) + "    " + this.value.substring(this.selectionEnd);
+                this.selectionEnd = s + 4;
+                indentLevel += 1
+            }
+            if (keyboardEvent.key == 13 || keyboardEvent.which == 13) {
+                keyboardEvent.preventDefault();
+                var s = this.selectionStart;
+                var spaces = ""
+                for (_ in Array.from(Array(indentLevel).keys())) {
+                    spaces += "    "
+                }
+                this.value = this.value.substring(0, this.selectionStart) + "\n" + spaces + this.value.substring(this.selectionEnd);
+                this.selectionEnd = s + (indentLevel * 4) + 1
+            }
+        }
+    
+        function updateIndentation() {
+            indentation = ""
+            for (_ in Array.from(Array(indentLevel).keys())) {
+                indentation += "    "
+            }
+            console.log("Indentation updated: -" + indentation + "-")
+            
+            // Update if textToAdd changes
+            var textToAdd = ["<a></a>", "<audio source=&quot;&quot; type=&quot;&quot;></audio>", "<b></b>", "<body></body>", "<br>", "<button onclick=&quot;&quot;></button>", "<div id=&quot;&quot;></div>", "<h1></h1>", "<h2></h2>", "<h3></h3>", "<head></head>", "<html></html>", "<i></i>", "<img src=&quot;&quot;></img>", "<input id=&quot;&quot; type=&quot;&quot;></input>", "<p></p>", "<style></style>", "<u></u>", "<video><scource src=&quot;&quot; type=&quot;&quot;></video>", "document.getElementById('')", "if () {\n" + indentation + "    " + "\n" + indentation + "}", "for (_ in []) {\n" + indentation + "    " + "\n" + indentation + "}", "function func() {\n" + indentation + "    " + "\n" + indentation + "}", "switch () {\n" + indentation + "    " + "\n" + indentation + "}", "", "", ]
+        }
+    </script>
     
 </html>
