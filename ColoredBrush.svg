@@ -1,0 +1,15 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="24" height="24" fill="white"/>
+<mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="2" y="2" width="20" height="19">
+<path d="M5 11.0025C3.34 11.0025 2 12.3425 2 14.0025C2 15.3125 0.84 16.0025 0 16.0025C0.92 17.2225 2.49 18.0025 4 18.0025C6.21 18.0025 8 16.2125 8 14.0025C8 12.3425 6.66 11.0025 5 11.0025ZM18.71 1.6325L17.37 0.2925C16.98 -0.0975 16.35 -0.0975 15.96 0.2925L7 9.2525L9.75 12.0025L18.71 3.0425C19.1 2.6525 19.1 2.0225 18.71 1.6325Z" transform="translate(2 2.9975)" fill="black"/>
+</mask>
+<g mask="url(#mask0)">
+<rect width="8" height="7" transform="translate(2 14)" fill="#FFCC00"/>
+</g>
+<mask id="mask1" mask-type="alpha" maskUnits="userSpaceOnUse" x="2" y="3" width="20" height="19">
+<path d="M5 11.0025C3.34 11.0025 2 12.3425 2 14.0025C2 15.3125 0.84 16.0025 0 16.0025C0.92 17.2225 2.49 18.0025 4 18.0025C6.21 18.0025 8 16.2125 8 14.0025C8 12.3425 6.66 11.0025 5 11.0025ZM18.71 1.6325L17.37 0.2925C16.98 -0.0975 16.35 -0.0975 15.96 0.2925L7 9.2525L9.75 12.0025L18.71 3.0425C19.1 2.6525 19.1 2.0225 18.71 1.6325Z" transform="translate(2 3)" fill="black"/>
+</mask>
+<g mask="url(#mask1)">
+<rect width="14.8902" height="5.61393" transform="translate(8 11.8284) rotate(-45)" fill="#007AFF"/>
+</g>
+</svg>
